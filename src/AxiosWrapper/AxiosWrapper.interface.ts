@@ -5,7 +5,8 @@ import { AxiosRequestConfig } from "axios";
  */
 export interface IAxiosWrapper {
     get<TResponse>(
-        path: string
+        path: string,
+        config?: AxiosRequestConfig
     ): Promise<TResponse>;
 
     post<TRequest, TResponse>(
@@ -16,11 +17,13 @@ export interface IAxiosWrapper {
 
     put<TRequest, TResponse>(
         path: string,
-        object: TRequest
+        object: TRequest,
+        config?: AxiosRequestConfig
     ): Promise<TResponse>;
 
     patch<TRequest, TResponse>(
         path: string,
-        object: TRequest
+        object: TRequest,
+        config?: AxiosRequestConfig
     ): Promise<TResponse>;
 }

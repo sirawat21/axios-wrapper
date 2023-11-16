@@ -7,7 +7,7 @@ import { IAxiosWrapper } from "./AxiosWrapper.interface";
 export default class AxiosWrapper implements IAxiosWrapper {
     private client: AxiosInstance;
     protected defaultConfig = {
-        baseURL: "https://reqres.in", // TODO Required change
+        baseURL: "localhost", // TODO Required change
         headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
@@ -32,9 +32,12 @@ export default class AxiosWrapper implements IAxiosWrapper {
     /*
      * Http Get
      */
-    public async get<TResponse>(path: string): Promise<TResponse> {
+    public async get<TResponse>(
+        path: string,
+        config?: AxiosRequestConfig
+    ): Promise<TResponse> {
         try {
-            const response = await this.client.get<TResponse>(path);
+            const response = await this.client.get<TResponse>(path, config);
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
@@ -66,10 +69,11 @@ export default class AxiosWrapper implements IAxiosWrapper {
      */
     public async put<TRequest, TResponse>(
         path: string,
-        object: TRequest
+        object: TRequest,
+        config?: AxiosRequestConfig
     ): Promise<TResponse> {
         try {
-            const response = await this.client.put<TResponse>(path, object);
+            const response = await this.client.put<TResponse>(path, object, config);
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
@@ -82,10 +86,11 @@ export default class AxiosWrapper implements IAxiosWrapper {
      */
     public async patch<TRequest, TResponse>(
         path: string,
-        object: TRequest
+        object: TRequest,
+        config?: AxiosRequestConfig
     ): Promise<TResponse> {
         try {
-            const response = await this.client.patch<TResponse>(path, object);
+            const response = await this.client.patch<TResponse>(path, object, config);
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
