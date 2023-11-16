@@ -1,1 +1,2 @@
-export { default as AxiosWrapper } from "./AxiosWrapper";
+import AxiosWrapper from "./AxiosWrapper";
+export default AxiosWrapper;
