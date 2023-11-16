@@ -28,15 +28,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
   /*
    * Http Get
    */
-  public async get<TResponse>(path: string):Promise<TResponse> {
+  public async get<TResponse>(path: string): Promise<TResponse> {
     try {
-        const response = await this.client.get<TResponse>(path);
-        return response.data;
-      } catch (error) {
-        console.error(error) // TODO Required change
-      }
-      return {} as TResponse;
+      const response = await this.client.get<TResponse>(path);
+      return response.data;
+    } catch (error) {
+      console.error(error); // TODO Required change
     }
+    return {} as TResponse;
   }
 
   /*
@@ -48,14 +47,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
     config?: AxiosRequestConfig
   ): Promise<TResponse> {
     try {
-        const response = config
-          ? await this.client.post<TResponse>(path, payload, config)
-          : await this.client.post<TResponse>(path, payload);
-        return response.data;
-      } catch (error) {
-        handleServiceError(error);
-      }
-      return {} as TResponse;
+      const response = config
+        ? await this.client.post<TResponse>(path, object, config)
+        : await this.client.post<TResponse>(path, object);
+      return response.data;
+    } catch (error) {
+      console.error(error); // TODO Required change
+    }
+    return {} as TResponse;
   }
 
   /*
@@ -64,14 +63,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
   public async put<TRequest, TResponse>(
     path: string,
     object: TRequest
-  ):Promise<TResponse>{
+  ): Promise<TResponse> {
     try {
-        const response = await this.client.put<TResponse>(path, payload);
-        return response.data;
-      } catch (error) {
-        handleServiceError(error);
-      }
-      return {} as TResponse;
+      const response = await this.client.put<TResponse>(path, object);
+      return response.data;
+    } catch (error) {
+      console.error(error); // TODO Required change
+    }
+    return {} as TResponse;
   }
 
   /*
@@ -79,12 +78,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
    */
   public async patch<TRequest, TResponse>(
     path: string,
-    object: TRequest):Promise<TResponse> {    try {
-        const response = await this.client.patch<TResponse>(path, payload);
-        return response.data;
-      } catch (error) {
-        handleServiceError(error);
-      }
-      return {} as TResponse;}
-
+    object: TRequest
+  ): Promise<TResponse> {
+    try {
+      const response = await this.client.patch<TResponse>(path, object);
+      return response.data;
+    } catch (error) {
+      console.error(error); // TODO Required change
+    }
+    return {} as TResponse;
+  }
 }
