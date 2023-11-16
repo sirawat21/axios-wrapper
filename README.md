@@ -23,6 +23,7 @@ The Axios Wrapper project is an axios-http based API client, which is designed f
     - [axios](https://axios-http.com)
 - **Development tools**
     - [typescript](https://www.typescriptlang.org/download)
+    - [ts-node](https://www.npmjs.com/package/ts-node)
     - [nodemon](https://www.npmjs.com/package/nodemon)
     - [npm-run-all](https://www.npmjs.com/package/npm-run-all)
 ---
