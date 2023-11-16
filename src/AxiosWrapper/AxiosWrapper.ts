@@ -1,21 +1,22 @@
 import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { IAxiosWrapper } from "./AxiosWrapper.interface";
-import Configs from "./AxiosWrapper.configs";
 
 /**
  * AxiosWrapper class
  */
 export default class AxiosWrapper implements IAxiosWrapper {
   private client: AxiosInstance;
-  protected baseUrl = Configs.baseUrl;
-  protected header = Configs.header;
+  protected defaultConfig = {
+    baseURL: "https://reqres.in", // TODO Required change
+    headers: {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "User-Agent": "axios/1.6.2",
+    },
+  };
 
   constructor(config?: AxiosRequestConfig) {
-    const defaultConfig = {
-      baseURL: this.baseUrl,
-      headers: this.header,
-    };
-    this.client = Axios.create(config ? config : defaultConfig);
+    this.client = Axios.create(config ? config : this.defaultConfig);
   }
 
   /*
@@ -23,6 +24,13 @@ export default class AxiosWrapper implements IAxiosWrapper {
    */
   public setBearerToken(token: string) {
     this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+
+  /*
+   * Set base URL
+   */
+  public setBaseURL(url: string) {
+    this.client.defaults.headers.common.baseURL = url;
   }
 
   /*
