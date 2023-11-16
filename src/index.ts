@@ -1,0 +1,2 @@
+// index
+console.log("Index");
