@@ -1,11 +1,20 @@
-import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import Axios, {
+    AxiosInstance,
+    AxiosRequestConfig,
+    InternalAxiosRequestConfig,
+    AxiosResponse,
+    AxiosError,
+} from "axios";
 import { IAxiosWrapper } from "./AxiosWrapper.interface";
 
 /**
  * AxiosWrapper class
  */
 export default class AxiosWrapper implements IAxiosWrapper {
-    private client: AxiosInstance;
+    /*
+     * Properties
+     */
+    private axios: AxiosInstance;
     protected defaultConfig = {
         baseURL: "localhost", // TODO Required change
         headers: {
@@ -15,18 +24,48 @@ export default class AxiosWrapper implements IAxiosWrapper {
         },
     };
 
-    /**
-     * AxiosWrapper class
+    /*
+     * Constructor
      */
     constructor(config?: AxiosRequestConfig) {
-        this.client = Axios.create({ ...this.defaultConfig, ...config });
+        this.axios = Axios.create({ ...this.defaultConfig, ...config });
     }
 
     /*
-     * Set authorization by Bearer token  :
+     * Set Request interceptor
+     */
+    public setRequestInterceptor(interceptorCallback, errorCallback) {
+        const errorHandler = (error: AxiosError) => {
+            errorCallback(error);
+            throw error;
+        };
+        const interceptor = (requestConfig: InternalAxiosRequestConfig) => {
+            interceptorCallback(requestConfig);
+            return requestConfig;
+        };
+        this.axios.interceptors.request.use(interceptor, errorHandler);
+    }
+
+    /*
+     * Set Response interceptor
+     */
+    public setResponseInterceptor(interceptorCallback, errorCallback) {
+        const errorHandler = (error: AxiosError) => {
+            errorCallback(error);
+            throw error;
+        };
+        const interceptor = (response: AxiosResponse) => {
+            interceptorCallback(response);
+            return response;
+        };
+        this.axios.interceptors.response.use(interceptor, errorHandler);
+    }
+
+    /*
+     * Set Authorization by Bearer token
      */
     public setBearerToken(token: string) {
-        this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
+        this.axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     }
 
     /*
@@ -37,7 +76,7 @@ export default class AxiosWrapper implements IAxiosWrapper {
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
         try {
-            const response = await this.client.get<TResponse>(path, config);
+            const response = await this.axios.get<TResponse>(path, config);
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
@@ -55,8 +94,8 @@ export default class AxiosWrapper implements IAxiosWrapper {
     ): Promise<TResponse> {
         try {
             const response = config
-                ? await this.client.post<TResponse>(path, object, config)
-                : await this.client.post<TResponse>(path, object);
+                ? await this.axios.post<TResponse>(path, object, config)
+                : await this.axios.post<TResponse>(path, object);
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
@@ -73,7 +112,11 @@ export default class AxiosWrapper implements IAxiosWrapper {
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
         try {
-            const response = await this.client.put<TResponse>(path, object, config);
+            const response = await this.axios.put<TResponse>(
+                path,
+                object,
+                config
+            );
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
@@ -90,7 +133,11 @@ export default class AxiosWrapper implements IAxiosWrapper {
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
         try {
-            const response = await this.client.patch<TResponse>(path, object, config);
+            const response = await this.axios.patch<TResponse>(
+                path,
+                object,
+                config
+            );
             return response.data;
         } catch (error) {
             console.error(error); // TODO Required change
