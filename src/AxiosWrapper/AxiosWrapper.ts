@@ -102,9 +102,11 @@ export default class AxiosWrapper implements IAxiosWrapper {
         errorHandler?
     ): Promise<TResponse> {
         try {
-            const response = config
-                ? await this.axios.post<TResponse>(path, object, config)
-                : await this.axios.post<TResponse>(path, object);
+            const response = await this.axios.post<TResponse>(
+                path,
+                object,
+                config
+            );
             return response.data;
         } catch (error) {
             if (errorHandler) errorHandler(error);
