@@ -32,33 +32,40 @@ export default class AxiosWrapper implements IAxiosWrapper {
     }
 
     /*
+     * Terminate onnection
+     */
+    terminateConnection() {
+        this.axios = null;
+    }
+
+    /*
      * Set Request interceptor
      */
-    public setRequestInterceptor(interceptorCallback, errorCallback?) {
+    public setRequestInterceptor(interceptorCallback, errorHandler?) {
         const interceptor = (requestConfig: InternalAxiosRequestConfig) => {
             interceptorCallback(requestConfig);
             return requestConfig;
         };
-        const errorHandler = (error: AxiosError) => {
-            if (errorCallback) errorCallback(error);
+        const error = (error: AxiosError) => {
+            if (errorHandler) errorHandler(error);
             return error;
         };
-        this.axios.interceptors.request.use(interceptor, errorHandler);
+        this.axios.interceptors.request.use(interceptor, error);
     }
 
     /*
      * Set Response interceptor
      */
-    public setResponseInterceptor(interceptorCallback, errorCallback?) {
+    public setResponseInterceptor(interceptorCallback, errorHandler?) {
         const interceptor = (response: AxiosResponse) => {
             interceptorCallback(response);
             return response;
         };
-        const errorHandler = (error: AxiosError) => {
-            if (errorCallback) errorCallback(error);
+        const error = (error: AxiosError) => {
+            if (errorHandler) errorHandler(error);
             return error;
         };
-        this.axios.interceptors.response.use(interceptor, errorHandler);
+        this.axios.interceptors.response.use(interceptor, error);
     }
 
     /*
@@ -73,13 +80,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
      */
     public async get<TResponse>(
         path: string,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?
     ): Promise<TResponse> {
         try {
             const response = await this.axios.get<TResponse>(path, config);
             return response.data;
         } catch (error) {
-            console.error(error); // TODO Required change
+            if (errorHandler) errorHandler(error);
         }
         return {} as TResponse;
     }
@@ -90,7 +98,8 @@ export default class AxiosWrapper implements IAxiosWrapper {
     public async post<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?
     ): Promise<TResponse> {
         try {
             const response = config
@@ -98,7 +107,7 @@ export default class AxiosWrapper implements IAxiosWrapper {
                 : await this.axios.post<TResponse>(path, object);
             return response.data;
         } catch (error) {
-            console.error(error); // TODO Required change
+            if (errorHandler) errorHandler(error);
         }
         return {} as TResponse;
     }
@@ -109,7 +118,8 @@ export default class AxiosWrapper implements IAxiosWrapper {
     public async put<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?
     ): Promise<TResponse> {
         try {
             const response = await this.axios.put<TResponse>(
@@ -119,7 +129,7 @@ export default class AxiosWrapper implements IAxiosWrapper {
             );
             return response.data;
         } catch (error) {
-            console.error(error); // TODO Required change
+            if (errorHandler) errorHandler(error);
         }
         return {} as TResponse;
     }
@@ -130,7 +140,8 @@ export default class AxiosWrapper implements IAxiosWrapper {
     public async patch<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?
     ): Promise<TResponse> {
         try {
             const response = await this.axios.patch<TResponse>(
@@ -140,7 +151,7 @@ export default class AxiosWrapper implements IAxiosWrapper {
             );
             return response.data;
         } catch (error) {
-            console.error(error); // TODO Required change
+            if (errorHandler) errorHandler(error);
         }
         return {} as TResponse;
     }

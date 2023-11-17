@@ -11,36 +11,42 @@ import {
 export interface IAxiosWrapper {
     get<TResponse>(
         path: string,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?: (error: AxiosError) => AxiosError
     ): Promise<TResponse>;
 
     post<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?: (error: AxiosError) => AxiosError
     ): Promise<TResponse>;
 
     put<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?: (error: AxiosError) => AxiosError
     ): Promise<TResponse>;
 
     patch<TRequest, TResponse>(
         path: string,
         object: TRequest,
-        config?: AxiosRequestConfig
+        config?: AxiosRequestConfig,
+        errorHandler?: (error: AxiosError) => AxiosError
     ): Promise<TResponse>;
 
     setRequestInterceptor(
         interceptorCallback: (
             requestConfig: InternalAxiosRequestConfig
         ) => InternalAxiosRequestConfig,
-        errorCallback?: (error: AxiosError) => AxiosError
+        errorHandler?: (error: AxiosError) => AxiosError
     );
 
     setResponseInterceptor(
         interceptorCallback: (response: AxiosResponse) => AxiosResponse,
-        errorCallback?: (error: AxiosError) => AxiosError
+        errorHandler?: (error: AxiosError) => AxiosError
     );
+
+    terminateConnection: () => void;
 }
