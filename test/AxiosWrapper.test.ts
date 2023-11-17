@@ -1,4 +1,4 @@
-import AxiosWrapper from "../AxiosWrapper";
+import AxiosWrapper from "../src/AxiosWrapper";
 
 const client = new AxiosWrapper({ baseURL: "https://reqres.in" });
 

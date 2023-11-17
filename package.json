@@ -8,7 +8,7 @@
     "complie": "tsc",
     "build": "npm-run-all clear complie",
     "exec": "ts-node ./src/index.ts",
-    "test": "jest",
+    "test": "jest ./test",
     "start": "nodemon"
   },
   "author": "Brett Sirawat",
