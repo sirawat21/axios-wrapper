@@ -34,14 +34,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
     /*
      * Set Request interceptor
      */
-    public setRequestInterceptor(interceptorCallback, errorCallback) {
-        const errorHandler = (error: AxiosError) => {
-            errorCallback(error);
-            throw error;
-        };
+    public setRequestInterceptor(interceptorCallback, errorCallback?) {
         const interceptor = (requestConfig: InternalAxiosRequestConfig) => {
             interceptorCallback(requestConfig);
             return requestConfig;
+        };
+        const errorHandler = (error: AxiosError) => {
+            if (errorCallback) errorCallback(error);
+            return error;
         };
         this.axios.interceptors.request.use(interceptor, errorHandler);
     }
@@ -49,14 +49,14 @@ export default class AxiosWrapper implements IAxiosWrapper {
     /*
      * Set Response interceptor
      */
-    public setResponseInterceptor(interceptorCallback, errorCallback) {
-        const errorHandler = (error: AxiosError) => {
-            errorCallback(error);
-            throw error;
-        };
+    public setResponseInterceptor(interceptorCallback, errorCallback?) {
         const interceptor = (response: AxiosResponse) => {
             interceptorCallback(response);
             return response;
+        };
+        const errorHandler = (error: AxiosError) => {
+            if (errorCallback) errorCallback(error);
+            return error;
         };
         this.axios.interceptors.response.use(interceptor, errorHandler);
     }
