@@ -32,7 +32,7 @@ export default class AxiosWrapper implements IAxiosWrapper {
     }
 
     /*
-     * Terminate onnection
+     * Terminate connection
      */
     terminateConnection() {
         this.axios = null;
